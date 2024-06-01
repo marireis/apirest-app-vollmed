@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import med.voll.api.model.dto.DadosAtualizarMedicoDTO;
-import med.voll.api.model.dto.DadosCadastroMedicoDTO;
+import med.voll.api.model.dto.medico.DadosAtualizarMedicoDTO;
+import med.voll.api.model.dto.medico.DadosCadastroMedicoDTO;
 
 @Table(name = "medicos")
 @Entity(name = "Medico")
@@ -29,8 +29,10 @@ public class Medico {
 
     @Embedded
     private Endereco endereco;
+    private boolean ativo;
 
     public Medico(DadosCadastroMedicoDTO dados) {
+        this.ativo = true;
         this.nome = dados.nome();
         this.email = dados.email();
         this.telefone = dados.telefone();
@@ -43,56 +45,32 @@ public class Medico {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getNome() {
         return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getTelefone() {
         return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
     }
 
     public String getCrm() {
         return crm;
     }
 
-    public void setCrm(String crm) {
-        this.crm = crm;
-    }
-
     public Especialidade getEspecialidade() {
         return especialidade;
-    }
-
-    public void setEspecialidade(Especialidade especialidade) {
-        this.especialidade = especialidade;
     }
 
     public Endereco getEndereco() {
         return endereco;
     }
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
+    public boolean isAtivo() {
+        return ativo;
     }
 
     public void atualizarInformacoes(DadosAtualizarMedicoDTO dados) {
@@ -102,10 +80,12 @@ public class Medico {
         if(dados.telefone() != null){
             this.telefone = dados.telefone();
         }
-        if(dados.endereo() != null){
-            this.endereco.atualizarInformacoesEndereco(dados.endereo());
+        if(dados.endereco() != null) {
+            this.endereco.atualizarInformacoesEndereco(dados.endereco());
         }
-
-
     }
+    public void excluir() {
+        this.ativo = false;
+    }
+
 }
