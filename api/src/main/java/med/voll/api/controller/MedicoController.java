@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import med.voll.api.model.Medico;
 import med.voll.api.model.dto.medico.DadosAtualizarMedicoDTO;
 import med.voll.api.model.dto.medico.DadosCadastroMedicoDTO;
-import med.voll.api.model.dto.medico.DadosDetalhamentoMedico;
+import med.voll.api.model.dto.medico.DadosDetalhamentoMedicoDTO;
 import med.voll.api.model.dto.medico.DadosListagemMedicoDTO;
 import med.voll.api.repository.MedicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class MedicoController {
         var medico = new Medico(dados);
         repository.save(medico);
         var uri = uriBuilder.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri();//pega a url da requisição
-        return ResponseEntity.created(uri).body(new DadosDetalhamentoMedico(medico));//retornar 201, cabeçalho e body
+        return ResponseEntity.created(uri).body(new DadosDetalhamentoMedicoDTO(medico));//retornar 201, cabeçalho e body
     }
 
     @GetMapping
@@ -44,7 +44,7 @@ public class MedicoController {
         var medico = repository.getReferenceById(dados.id());
         medico.atualizarInformacoes(dados);
 
-        return ResponseEntity.ok(new DadosDetalhamentoMedico(medico));
+        return ResponseEntity.ok(new DadosDetalhamentoMedicoDTO(medico));
     }
 
     //desativar do banco o cadastro, não deletar
@@ -54,6 +54,12 @@ public class MedicoController {
         var medico = repository.getReferenceById(id);
         medico.excluir();
         return ResponseEntity.noContent().build();//codigo 204 para dizer que foi excluido mas não tem retorno
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity detalharMedico(@PathVariable Long id){
+        var medico = repository.getReferenceById(id);
+        return ResponseEntity.ok(new DadosDetalhamentoMedicoDTO(medico));
     }
 
 }
