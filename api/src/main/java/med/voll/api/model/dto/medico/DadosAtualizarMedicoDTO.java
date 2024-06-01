@@ -1,6 +1,6 @@
 package med.voll.api.model.dto.medico;
 
-import med.voll.api.model.dto.DadosEnderecoDTO;
+import med.voll.api.model.dto.endereco.DadosEnderecoDTO;
 
 public record DadosAtualizarMedicoDTO(Long id,
                                       String nome,
